@@ -1,6 +1,7 @@
 #include<iostream>
 #include<string>
 #include <functional>
+#include <time.h>
 #include "transaction.h"
 
 // Set Maximum Number of TXN in a Block
@@ -18,10 +19,17 @@ class Block{
         // Updates the current hash
         void updateHash(){
             size_t hashValue = 0;
+              
+            time_t rawtime;
+            time ( &rawtime );
+
+            // Hash Current Time
+            hash<time_t> hashTime;
+            hashValue=hashTime(rawtime);
             
             // Hash Prev Block
             hash<size_t> hashHash;
-            hashValue=hashHash(prevBlockHash);
+            hashValue^=hashHash(prevBlockHash);
 
             // Hash Trans. Count
             hash<int> hashInt;
@@ -73,9 +81,10 @@ class Block{
         void freeBlock(){}
 
         void displayBlock(){
+            cout<<"             BLOCK"<<endl;
             cout<<"---------------------------------------"<<endl;
             cout<<endl;
-            cout<<"CURRENT BLOCK HASH :: "<<currBlockHash<<endl;
+            cout<<"THIS BLOCK HASH :: "<<currBlockHash<<endl;
             cout<<endl;
             cout<<"---------------------------------------"<<endl;
             cout<<endl;
